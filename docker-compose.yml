@@ -1,11 +1,15 @@
 version: '3'
 services:
+  # # これを有効にすると、docker-compose upでdbコンテナが起動する
+  # # config/database.ymlのdevelopmentのadapterをsqlite3からpostgresqlに変更する必要がある
   # db:
   #   image: postgres
   #   # dbのユーザー名とパスワードでこれが無いとdbが起動できなかった
   #   environment:
   #     POSTGRES_USER: postgres
   #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - "5432:5432"
   #   # 無くても動くけど指定しておくとdocker-composeを停止してもdbの内容が永続化されるため、指定することが多いと思われる
   #   # https://matsuand.github.io/docs.docker.jp.onthefly/storage/volumes/
   #   volumes:
@@ -31,6 +35,18 @@ services:
     stdin_open: true # サービス コンテナに標準入力を割り当てて実行するよう設定(https://docs.docker.jp/compose/compose-file/index.html#stdin-open)。
     # depends_on:
     #   - db
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.local:12080'
+        nginx['listen_port'] = 80
+    ports:
+      - '12080:80'
+    volumes:
+      - '/srv/gitlab/config:/etc/gitlab'
+      - '/srv/gitlab/logs:/var/log/gitlab'
+      - '/srv/gitlab/data:/var/opt/gitlab'
 volumes:
   postgres_volume:
-

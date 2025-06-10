@@ -22,3 +22,22 @@
     ```shell
     docker compose down
     ```
+
+## gitlabコンテナの設定
+
+- 参考: [壊してもいい練習用のgitサーバーを構築しよう](https://qiita.com/magiclib/items/d0ec68886aead86ad510)
+
+### 手順
+
+1. dockerコンテナ起動後、gitlabのrootパスワード確認
+  - 1日経過するとファイルが消えてしまうので、忘れないようにコンテナ作成直後に確認
+    ```shell
+    sudo docker exec rails-docker-practice-gitlab-1 cat /etc/gitlab/initial_root_password
+    ```
+
+2. ローカルのgitlabサーバへアクセスする
+  - `http://127.0.0.1:12080`
+
+3. rootユーザでログイン
+
+4. 以降の手順は、参考ページを参照
